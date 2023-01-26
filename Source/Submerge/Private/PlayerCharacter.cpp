@@ -16,6 +16,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	UE_LOG(LogTemp, Warning, TEXT("asgdhasdg"));
 }
 
 // Called every frame
