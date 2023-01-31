@@ -56,6 +56,8 @@ void ASubmergePlayerCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 void ASubmergePlayerCharacter::MoveForward(float Value)
 {
+	// UE_LOG(LogTemp, Error, TEXT("Controller: %s"), *FString(TEXT(Controller)));
+	// GetController();
 	if (Controller)
 	{
 		AddMovementInput(GetActorForwardVector(), !Grabber->HoldingObject ? Value : Value * HoldSpeed);
