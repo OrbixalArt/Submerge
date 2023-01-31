@@ -32,7 +32,8 @@ void ASubmergePlayerCharacter::BeginPlay()
 void ASubmergePlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	//UE_LOG(LogTemp, Warning, TEXT("inside tick"));
+	
 	//FVector Start = Camera->GetComponentLocation();
 	//FVector End = (Camera->GetComponentRotation().Vector() * 200.f) + Start;
 	//FHitResult HitResult;
@@ -58,7 +59,10 @@ void ASubmergePlayerCharacter::MoveForward(float Value)
 	if (Controller)
 	{
 		AddMovementInput(GetActorForwardVector(), !Grabber->HoldingObject ? Value : Value * HoldSpeed);
+		UE_LOG(LogTemp, Warning, TEXT("Inside MoveForward"));
+		return;
 	}
+	UE_LOG(LogTemp, Warning, TEXT("false"));
 }
 
 void ASubmergePlayerCharacter::MoveRight(float Value)
@@ -66,6 +70,7 @@ void ASubmergePlayerCharacter::MoveRight(float Value)
 	if (Controller)
 	{
 		AddMovementInput(GetActorRightVector(), !Grabber->HoldingObject ? Value : Value * HoldSpeed);
+		//UE_LOG(LogTemp, Warning, TEXT("Inside MoveRight"));
 	}
 }
 
