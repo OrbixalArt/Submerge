@@ -7,9 +7,12 @@
 void ASubmergePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
+void ASubmergePlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
 	PossessedCharacter = Cast<ASubmergePlayerCharacter>(GetPawn());
-	// After possession, gotta reference the controller again
 }
 
 void ASubmergePlayerController::SetupInputComponent()
@@ -55,5 +58,6 @@ void ASubmergePlayerController::CallRelease()
 {
 	PossessedCharacter->Release();
 }
+
 
 // inside the tick get pawn and also leave in begin play
