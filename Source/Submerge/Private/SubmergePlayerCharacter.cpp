@@ -61,7 +61,6 @@ void ASubmergePlayerCharacter::MoveForward(float Value)
 	if (Controller)
 	{
 		AddMovementInput(GetActorForwardVector(), !Grabber->HoldingObject ? Value : Value * HoldSpeed);
-		UE_LOG(LogTemp, Warning, TEXT("Inside MoveForward"));
 		return;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("false"));
