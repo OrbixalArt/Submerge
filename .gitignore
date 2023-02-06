@@ -11,3 +11,5 @@ Saved
 *.suo
 *.xcodeproj
 *.xcworkspace
+
+Binaries/Win64/UnrealEditor-Submerge.dll
