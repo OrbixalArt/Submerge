@@ -11,6 +11,3 @@ Saved
 *.suo
 *.xcodeproj
 *.xcworkspace
-
-# conflict control
-Binaries
