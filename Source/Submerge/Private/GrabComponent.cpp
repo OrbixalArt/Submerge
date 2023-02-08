@@ -55,6 +55,10 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		if (PhysicsHandle->GrabbedComponent)
 		{
 			PhysicsHandle->SetTargetLocation(End);
+
+			//UPrimitiveComponent* GrabbedComp = PhysicsHandle->GetGrabbedComponent();
+			//
+			//GrabbedComp->SetWorldRotation(GetOwner()->GetActorRotation());
 		}
 	}
 
@@ -105,8 +109,11 @@ void UGrabComponent::Grab()
 				{
 					ComponentToGrab->AddImpulse(FVector(0.f, 0.f, 0.1f), FName("NAME_None"), true);
 
-					PhysicsHandle->GrabComponentAtLocation(ComponentToGrab, FName("NAME_None"), HitResult.ImpactPoint);
+					//PhysicsHandle->GrabComponentAtLocation(ComponentToGrab, FName("NAME_None"), HitResult.ImpactPoint);
 
+					PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, FName("NAME_None"), HitResult.Location, ComponentToGrab->GetComponentRotation());
+
+					//HitResult.ImpactPoint
 					HoldingObject = true;
 				}
 			}
