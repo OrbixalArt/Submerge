@@ -30,6 +30,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Reach")
 		float HoldDistance = 120.f;
 
+	UPROPERTY(EditAnywhere, Category = "Reach")
+		float HoldHeight = 40.f;
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
