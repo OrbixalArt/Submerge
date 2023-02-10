@@ -6,6 +6,7 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
@@ -43,18 +44,23 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 	// ...
 
-	UCameraComponent* Camera = GetOwner()->FindComponentByClass<UCameraComponent>();
+	//UCameraComponent* Camera = GetOwner()->FindComponentByClass<UCameraComponent>();
+	UCapsuleComponent* Capsule = GetOwner()->FindComponentByClass<UCapsuleComponent>();
 
-	if (Camera)
+	if (Capsule)
 	{
-		FVector Start = Camera->GetComponentLocation();
-		FVector End = (Camera->GetComponentRotation().Vector() * HoldDistance) + Start;
+		FVector Start = Capsule->GetComponentLocation();
+		FVector End = (Capsule->GetComponentRotation().Vector() * HoldDistance) + Start;
 
-		End.Z -= 30.f;
+		End.Z += HoldHeight;
 
 		if (PhysicsHandle->GrabbedComponent)
 		{
 			PhysicsHandle->SetTargetLocation(End);
+
+			//UPrimitiveComponent* GrabbedComp = PhysicsHandle->GetGrabbedComponent();
+			//
+			//GrabbedComp->SetWorldRotation(GetOwner()->GetActorRotation());
 		}
 	}
 
@@ -105,8 +111,11 @@ void UGrabComponent::Grab()
 				{
 					ComponentToGrab->AddImpulse(FVector(0.f, 0.f, 0.1f), FName("NAME_None"), true);
 
-					PhysicsHandle->GrabComponentAtLocation(ComponentToGrab, FName("NAME_None"), HitResult.ImpactPoint);
+					//PhysicsHandle->GrabComponentAtLocation(ComponentToGrab, FName("NAME_None"), HitResult.ImpactPoint);
 
+					PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, FName("NAME_None"), HitResult.Location, ComponentToGrab->GetComponentRotation());
+
+					//HitResult.ImpactPoint
 					HoldingObject = true;
 				}
 			}
