@@ -32,18 +32,6 @@ void ASubmergePlayerCharacter::BeginPlay()
 void ASubmergePlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//UE_LOG(LogTemp, Warning, TEXT("inside tick"));
-	
-	//FVector Start = Camera->GetComponentLocation();
-	//FVector End = (Camera->GetComponentRotation().Vector() * 200.f) + Start;
-	//FHitResult HitResult;
-	//TArray<AActor*> ActorsToIgnore;
-	//
-	//bool IsHit = UKismetSystemLibrary::LineTraceSingle
-	//(
-	//	GetWorld(), Start, End, UEngineTypes::ConvertToTraceType(ECC_Camera), false,
-	//	ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Red, FLinearColor::Green
-	//	, 0.5f);
 
 }
 
@@ -56,8 +44,7 @@ void ASubmergePlayerCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 void ASubmergePlayerCharacter::MoveForward(float Value)
 {
-	// UE_LOG(LogTemp, Error, TEXT("Controller: %s"), *FString(TEXT(Controller)));
-	// GetController();
+
 	if (Controller)
 	{
 		AddMovementInput(GetActorForwardVector(), !Grabber->HoldingObject ? Value : Value * HoldSpeed);
@@ -71,7 +58,6 @@ void ASubmergePlayerCharacter::MoveRight(float Value)
 	if (Controller)
 	{
 		AddMovementInput(GetActorRightVector(), !Grabber->HoldingObject ? Value : Value * HoldSpeed);
-		//UE_LOG(LogTemp, Warning, TEXT("Inside MoveRight"));
 	}
 }
 
@@ -80,13 +66,5 @@ void ASubmergePlayerCharacter::Grab()
 	if (Controller)
 	{
 		Grabber->Grab();
-	}
-}
-
-void ASubmergePlayerCharacter::Release()
-{
-	if (Controller)
-	{
-		Grabber->Release();
 	}
 }

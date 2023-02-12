@@ -53,12 +53,10 @@ void UTriggerReactComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		if (MoveState)
 		{
 			ActorMoveComponent->Move();
-			UE_LOG(LogTemp, Warning, TEXT("Moving Object"));
 		}
 		else
 		{
 			ActorMoveComponent->MoveBack();
-			UE_LOG(LogTemp, Warning, TEXT("Moving Back Object"));
 		}
 	}
 }
