@@ -25,7 +25,6 @@ void ASubmergePlayerController::SetupInputComponent()
 	InputComponent->BindAxis(FName("LookRight"), this, &ASubmergePlayerController::CallLookRight);
 
 	InputComponent->BindAction(FName("Interact"), IE_Pressed, this, &ASubmergePlayerController::CallGrab);
-	InputComponent->BindAction(FName("Interact"), IE_Released, this, &ASubmergePlayerController::CallRelease);
 }
 
 void ASubmergePlayerController::CallMoveForward(float Value)
@@ -52,11 +51,6 @@ void ASubmergePlayerController::CallLookRight(float Value)
 void ASubmergePlayerController::CallGrab()
 {
 	PossessedCharacter->Grab();
-}
-
-void ASubmergePlayerController::CallRelease()
-{
-	PossessedCharacter->Release();
 }
 
 
