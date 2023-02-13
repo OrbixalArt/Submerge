@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ActorMovementComponent.h"
+#include "PressurePlate/ActorMovementComponent.h"
 
 // Sets default values for this component's properties
 UActorMovementComponent::UActorMovementComponent()

@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TriggerActor.h"
+#include "PressurePlate/TriggerActor.h"
 #include "Components/BoxComponent.h"
-#include "TriggerInteractionComponent.h"
+#include "PressurePlate/TriggerInteractionComponent.h"
 
 // Sets default values
 ATriggerActor::ATriggerActor()

@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ReactActor.h"
-#include "TriggerReactComponent.h"
+#include "PressurePlate/ReactActor.h"
+#include "PressurePlate/TriggerReactComponent.h"
 
 // Sets default values
 AReactActor::AReactActor()

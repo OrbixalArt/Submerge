@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TriggerReactComponent.h"
-#include "ActorMovementComponent.h"
-#include "TriggerActor.h"
-#include "TriggerInteractionComponent.h"
+#include "PressurePlate/TriggerReactComponent.h"
+#include "PressurePlate/ActorMovementComponent.h"
+#include "PressurePlate/TriggerActor.h"
+#include "PressurePlate/TriggerInteractionComponent.h"
 
 // Sets default values for this component's properties
 UTriggerReactComponent::UTriggerReactComponent()
