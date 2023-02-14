@@ -116,6 +116,9 @@ void UGrabComponent::PickUpObject()
 	bool ObHit = GetWorld()->LineTraceSingleByObjectType(ObstacleHit, Start, End,
 		ECC_WorldStatic, CollisionParams);
 
+	FHitResult OneChannelHit;
+	bool ChannelHit = GetWorld()->LineTraceSingleByObjectType(HitResult, Start, End,
+		ECC_EngineTraceChannel1, CollisionParams);
 	
 	// Check for obstructing objects
 	if (!ObHit)
@@ -124,6 +127,10 @@ void UGrabComponent::PickUpObject()
 		if (IsHit)
 		{
 			CheckIfObjectIsBelow(HitResult, Start, End);
+		}
+		else if (ChannelHit)
+		{
+			UE_LOG(LogTemp, Error, TEXT("channel one hit"));
 		}
 		else
 		{
