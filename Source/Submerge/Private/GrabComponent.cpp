@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Components/CapsuleComponent.h"
+#include "Switch.h"
 
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
@@ -115,10 +116,6 @@ void UGrabComponent::PickUpObject()
 	FHitResult ObstacleHit;
 	bool ObHit = GetWorld()->LineTraceSingleByObjectType(ObstacleHit, Start, End,
 		ECC_WorldStatic, CollisionParams);
-
-	FHitResult OneChannelHit;
-	bool ChannelHit = GetWorld()->LineTraceSingleByObjectType(HitResult, Start, End,
-		ECC_EngineTraceChannel1, CollisionParams);
 	
 	// Check for obstructing objects
 	if (!ObHit)
@@ -128,10 +125,6 @@ void UGrabComponent::PickUpObject()
 		{
 			CheckIfObjectIsBelow(HitResult, Start, End);
 		}
-		else if (ChannelHit)
-		{
-			UE_LOG(LogTemp, Error, TEXT("channel one hit"));
-		}
 		else
 		{
 			DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
@@ -139,7 +132,13 @@ void UGrabComponent::PickUpObject()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Raycast obstructed"));
+		TObjectPtr<ASwitch> Switch = Cast<ASwitch>(ObstacleHit.GetActor());
+		if (Switch)
+		{
+			Switch->TurnOn();
+
+			UE_LOG(LogTemp, Warning, TEXT("Switch."));
+		}
 	}
 }
 
@@ -166,6 +165,7 @@ void UGrabComponent::CheckIfObjectIsBelow(const FHitResult& HitResult, const FVe
 }
 
 // Not relevant atm
+// Delete this
 TArray<FHitResult> UGrabComponent::CheckCollisionUnderneath() const
 {
 	TArray<FHitResult> HitResult;
