@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Components/CapsuleComponent.h"
+#include "Switch.h"
 
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
@@ -115,7 +116,6 @@ void UGrabComponent::PickUpObject()
 	FHitResult ObstacleHit;
 	bool ObHit = GetWorld()->LineTraceSingleByObjectType(ObstacleHit, Start, End,
 		ECC_WorldStatic, CollisionParams);
-
 	
 	// Check for obstructing objects
 	if (!ObHit)
@@ -132,7 +132,13 @@ void UGrabComponent::PickUpObject()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Raycast obstructed"));
+		TObjectPtr<ASwitch> Switch = Cast<ASwitch>(ObstacleHit.GetActor());
+		if (Switch)
+		{
+			Switch->TurnOn();
+
+			UE_LOG(LogTemp, Warning, TEXT("Switch."));
+		}
 	}
 }
 
@@ -159,6 +165,7 @@ void UGrabComponent::CheckIfObjectIsBelow(const FHitResult& HitResult, const FVe
 }
 
 // Not relevant atm
+// Delete this
 TArray<FHitResult> UGrabComponent::CheckCollisionUnderneath() const
 {
 	TArray<FHitResult> HitResult;

@@ -38,8 +38,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void CallGrab();
 
-	UFUNCTION(BlueprintCallable)
-		void CallRelease();
+	// UFUNCTION(BlueprintCallable)
+	//	void CallRelease();
 
 	//UFUNCTION(BlueprintCallable)
 	//void CallInteract();
