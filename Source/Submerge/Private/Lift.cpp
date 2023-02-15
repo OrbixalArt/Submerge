@@ -3,12 +3,20 @@
 
 #include "Lift.h"
 #include "Switch.h"
+#include "LiftMovementComponent.h"
+#include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ALift::ALift()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	Sphere = CreateDefaultSubobject<USphereComponent>(FName("Sphere"));
+	RootComponent = Sphere;
+
+	LiftMovementComponent = CreateDefaultSubobject<ULiftMovementComponent>(FName("LiftMovementComponent"));
 
 }
 
@@ -17,17 +25,25 @@ void ALift::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Switch->OnActivation().AddUObject(this, &ALift::ActivateLift);
-	
+	TArray<TObjectPtr<AActor>> SwitchesInGame;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASwitch::StaticClass(), SwitchesInGame);
+
+	for (int i = 0; i < SwitchesInGame.Num();i++)
+	{
+		TObjectPtr<ASwitch> Switch = Cast<ASwitch>(SwitchesInGame[i]);
+		Switch->LiftSwitchedOn.AddDynamic(this, &ALift::ActivateLift);
+		UE_LOG(LogTemp, Error, TEXT("Switch binding."));
+	}	
 }
 
 void ALift::ActivateLift()
 {
-	if (!LiftActivated)
+	if (!LiftMovementComponent->GetActiveState())
 	{
-		LiftActivated = true;
-		// increase the counter on the Lift Movement Component
+		LiftMovementComponent->SetActiveState(true);
+		UE_LOG(LogTemp, Error, TEXT("Lift is on"));
 	}
+
 }
 
 // Called every frame
