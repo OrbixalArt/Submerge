@@ -60,7 +60,11 @@ void ULiftMovementComponent::MoveLift()
 {
 	if (LiftActivated)
 	{
-		PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
+		if (!PlayerCharacter)
+		{
+			PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
+		}
+		
 		if ((CurrentMovementTime != TimeToMove) && OwnerSphereComponent->IsOverlappingActor(PlayerCharacter))
 		{
 			CurrentMovementTime = FMath::Clamp(CurrentMovementTime + GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);

@@ -65,6 +65,10 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	// raycast here - save reference - check if reference has changed
+	// use grab functionality to instead grab the saved reference object and don't call the raycast in that function.
+
+
 	if (HoldingObject)
 	{
 		if (Capsule)
