@@ -38,12 +38,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void CallGrab();
 
-	UFUNCTION(BlueprintCallable)
-		void CallRelease();
+	// UFUNCTION(BlueprintCallable)
+	//	void CallRelease();
 
 	//UFUNCTION(BlueprintCallable)
 	//void CallInteract();
 
+	UPROPERTY(BlueprintReadWrite)
 	ASubmergePlayerCharacter* PossessedCharacter;
 
+	// add the tick var
+	// Uipko says
+	virtual void OnPossess(APawn* InPawn) override;
 };

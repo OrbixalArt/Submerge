@@ -33,17 +33,6 @@ void ASubmergePlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//FVector Start = Camera->GetComponentLocation();
-	//FVector End = (Camera->GetComponentRotation().Vector() * 200.f) + Start;
-	//FHitResult HitResult;
-	//TArray<AActor*> ActorsToIgnore;
-	//
-	//bool IsHit = UKismetSystemLibrary::LineTraceSingle
-	//(
-	//	GetWorld(), Start, End, UEngineTypes::ConvertToTraceType(ECC_Camera), false,
-	//	ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Red, FLinearColor::Green
-	//	, 0.5f);
-
 }
 
 // Called to bind functionality to input
@@ -55,10 +44,13 @@ void ASubmergePlayerCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 void ASubmergePlayerCharacter::MoveForward(float Value)
 {
+
 	if (Controller)
 	{
 		AddMovementInput(GetActorForwardVector(), !Grabber->HoldingObject ? Value : Value * HoldSpeed);
+		return;
 	}
+	UE_LOG(LogTemp, Warning, TEXT("false"));
 }
 
 void ASubmergePlayerCharacter::MoveRight(float Value)
@@ -74,13 +66,5 @@ void ASubmergePlayerCharacter::Grab()
 	if (Controller)
 	{
 		Grabber->Grab();
-	}
-}
-
-void ASubmergePlayerCharacter::Release()
-{
-	if (Controller)
-	{
-		Grabber->Release();
 	}
 }

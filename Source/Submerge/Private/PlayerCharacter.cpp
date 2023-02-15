@@ -16,8 +16,6 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UE_LOG(LogTemp, Warning, TEXT("asgdhasdg"));
-	UE_LOG(LogTemp, Warning, TEXT("testing conflicts"));
 }
 
 // Called every frame
