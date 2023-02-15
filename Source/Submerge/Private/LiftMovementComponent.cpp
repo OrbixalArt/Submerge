@@ -20,7 +20,7 @@ void ULiftMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
+	// PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
 	OwnerSphereComponent = GetOwner()->FindComponentByClass<USphereComponent>();
 
 	StartLocation = GetOwner()->GetActorLocation();
@@ -60,6 +60,7 @@ void ULiftMovementComponent::MoveLift()
 {
 	if (LiftActivated)
 	{
+		PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
 		if ((CurrentMovementTime != TimeToMove) && OwnerSphereComponent->IsOverlappingActor(PlayerCharacter))
 		{
 			CurrentMovementTime = FMath::Clamp(CurrentMovementTime + GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);
