@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Lift.generated.h"
 
+class ULiftMovementComponent;
+class USphereComponent;
+
 UCLASS()
 class SUBMERGE_API ALift : public AActor
 {
@@ -19,12 +22,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	bool LiftActivated = false;
-
-	// Move this to Lift Movement Component
-	UPROPERTY(EditAnywhere)
-	TArray<float> Levels;
-
+	UFUNCTION()
 	void ActivateLift();
 
 	// TriggerBox to activate lift and check if player is in bounds
@@ -43,6 +41,11 @@ protected:
 		3: Player walks into lift -> Doors rise -> Lift moves
 		4: Lift reaches next level -> Lift is inactive -> Doors down */
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<ULiftMovementComponent> LiftMovementComponent;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USphereComponent> Sphere;
 
 public:	
 	// Called every frame

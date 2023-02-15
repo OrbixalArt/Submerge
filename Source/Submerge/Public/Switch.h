@@ -13,6 +13,8 @@ enum class ESwitchState : uint8 {
 	E_Off	UMETA(DisplayName = "Off"),
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLiftSwitchedOn);
+
 UCLASS()
 class SUBMERGE_API ASwitch : public AActor
 {
@@ -22,8 +24,11 @@ public:
 	// Sets default values for this actor's properties
 	ASwitch();
 
-	DECLARE_EVENT(ASwitch, FSwitchedOn)
-		FSwitchedOn& OnSwitchedOn() { return SwitchedOn; }
+	UPROPERTY(BlueprintAssignable)
+		FLiftSwitchedOn LiftSwitchedOn;
+
+	//DECLARE_EVENT(ASwitch, FSwitchedOn)
+	//	FSwitchedOn& OnSwitchedOn() { return SwitchedOn; }
 
 	UFUNCTION(BlueprintCallable)
 	void TurnOn();
@@ -33,7 +38,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	ESwitchState SwitchState = ESwitchState::E_Off;
-
-	FSwitchedOn SwitchedOn;
+	//
+	//FSwitchedOn SwitchedOn;
 
 };

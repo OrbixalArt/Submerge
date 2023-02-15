@@ -23,7 +23,7 @@ void ASwitch::TurnOn()
 	if (SwitchState == ESwitchState::E_Off)
 	{
 		SwitchState = ESwitchState::E_On;
-		OnSwitchedOn().Broadcast();
+		LiftSwitchedOn.Broadcast();
 		UE_LOG(LogTemp, Warning, TEXT("Switch is turned on."));
 		// Broadcast event to lift
 	}
