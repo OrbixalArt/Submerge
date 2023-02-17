@@ -2,6 +2,7 @@
 
 
 #include "LiftMovementComponent.h"
+#include "LiftDoorComponent.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values for this component's properties
@@ -22,10 +23,22 @@ void ULiftMovementComponent::BeginPlay()
 
 	// PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
 	OwnerSphereComponent = GetOwner()->FindComponentByClass<USphereComponent>();
+	LiftDoors = GetOwner()->FindComponentByClass<ULiftDoorComponent>();
+
+	if (LiftDoors)
+	{
+		LiftDoors->ActivateLift().AddUObject(this, &ULiftMovementComponent::ActivateLift);
+	}
 
 	StartLocation = GetOwner()->GetActorLocation();
 	NextLocation = StartLocation + FVector(0.f, 0.f, Levels[1]);
 	
+}
+
+void ULiftMovementComponent::ActivateLift()
+{
+	SetActiveState(true);
+	UE_LOG(LogTemp, Warning, TEXT("Lift is activated via event"));
 }
 
 void ULiftMovementComponent::UpdateLevelAndLocation()
@@ -41,8 +54,9 @@ void ULiftMovementComponent::UpdateLevelAndLocation()
 		}
 
 		SetActiveState(false);
+		LiftDoors->SetLiftMoving(false);
 		UE_LOG(LogTemp, Error, TEXT("Lift is off"));
-		//NewLevelReached().Broadcast();
+		NewLevelReached().Broadcast();
 	}
 
 }
@@ -60,11 +74,12 @@ void ULiftMovementComponent::MoveLift()
 {
 	if (LiftActivated)
 	{
+		LiftDoors->SetLiftMoving(true);
 		if (!PlayerCharacter)
 		{
 			PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
 		}
-		
+
 		if ((CurrentMovementTime != TimeToMove) && OwnerSphereComponent->IsOverlappingActor(PlayerCharacter))
 		{
 			CurrentMovementTime = FMath::Clamp(CurrentMovementTime + GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);
@@ -75,6 +90,22 @@ void ULiftMovementComponent::MoveLift()
 			GetOwner()->SetActorLocation(CurrentLocation);
 
 			UpdateLevelAndLocation();
+		}
+	}
+	else
+	{
+		if (!PlayerCharacter)
+		{
+			PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
+		}
+
+		if (PlayerCharacter)
+		{
+			if (OwnerSphereComponent->IsOverlappingActor(PlayerCharacter) && NewLevel)
+			{
+				LiftDoors->SetDoorsActive(false);
+				SetNewLevel(false);
+			}
 		}
 	}
 }

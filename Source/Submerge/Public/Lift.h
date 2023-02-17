@@ -7,6 +7,7 @@
 #include "Lift.generated.h"
 
 class ULiftMovementComponent;
+class ULiftDoorComponent;
 class USphereComponent;
 
 UCLASS()
@@ -42,13 +43,12 @@ protected:
 		4: Lift reaches next level -> Lift is inactive -> Doors down */
 
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<ULiftMovementComponent> LiftMovementComponent;
+		TObjectPtr<ULiftMovementComponent> LiftMovementComponent;
 
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<USphereComponent> Sphere;
+		TObjectPtr<USphereComponent> Sphere;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere)
+		TObjectPtr<ULiftDoorComponent> LiftDoorComponent;
 
 };
