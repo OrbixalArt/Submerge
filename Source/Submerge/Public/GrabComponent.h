@@ -23,6 +23,13 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	// Widget
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> WidgetClass;
+
+	UPROPERTY(VisibleInstanceOnly)
+	class UInteractWidget* InteractWidget;
+
 	TObjectPtr<UPhysicsHandleComponent> PhysicsHandle = nullptr;
 	TObjectPtr<UCapsuleComponent> Capsule = nullptr;
 	TObjectPtr<UCameraComponent> Camera = nullptr;
