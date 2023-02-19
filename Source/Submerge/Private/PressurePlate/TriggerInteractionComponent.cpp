@@ -11,8 +11,6 @@ UTriggerInteractionComponent::UTriggerInteractionComponent()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	Box = CreateDefaultSubobject<UBoxComponent>(FName("Box"));
-
 	ActorMoveComp = CreateDefaultSubobject<UActorMovementComponent>(FName("ActorMoveComp"));
 }
 
@@ -21,8 +19,13 @@ void UTriggerInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Box->OnComponentBeginOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapBegin);
-	Box->OnComponentEndOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapEnd);
+	Box = GetOwner()->FindComponentByClass<UBoxComponent>();
+	
+	if(Box)
+	{
+		Box->OnComponentBeginOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapBegin);
+		Box->OnComponentEndOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapEnd);
+	}
 
 }
 
