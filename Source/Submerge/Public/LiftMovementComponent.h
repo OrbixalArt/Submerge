@@ -7,6 +7,7 @@
 #include "LiftMovementComponent.generated.h"
 
 class USphereComponent;
+class ULiftDoorComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SUBMERGE_API ULiftMovementComponent : public UActorComponent
@@ -20,8 +21,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	//DECLARE_EVENT(ULiftMovementComponent, FReachedNewLevel)
-	//	FReachedNewLevel& NewLevelReached() { return ReachedNewLevel; }
+	DECLARE_EVENT(ULiftMovementComponent, FReachedNewLevel)
+		FReachedNewLevel& NewLevelReached() { return ReachedNewLevel; }
 
 	void MoveLift();
 	void IncrementCounter() { CurrentLevel++; }
@@ -29,12 +30,19 @@ public:
 	bool GetActiveState() { return LiftActivated; }
 	void SetActiveState(bool State) { LiftActivated = State; }
 
+	bool GetNewLevel() { return NewLevel; }
+	void SetNewLevel(bool State) { NewLevel = State; }
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	void ActivateLift();
+
 	TObjectPtr<APawn> PlayerCharacter;
 	TObjectPtr<USphereComponent> OwnerSphereComponent;
+	TObjectPtr<ULiftDoorComponent> LiftDoors;
 
 	bool LiftActivated = false;
 
@@ -57,7 +65,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Levels")
 		FRuntimeFloatCurve MovementCurve;
 
-	//FReachedNewLevel ReachedNewLevel;
+	FReachedNewLevel ReachedNewLevel;
+
+	bool NewLevel = false;
 
 	void UpdateLevelAndLocation();
 };
