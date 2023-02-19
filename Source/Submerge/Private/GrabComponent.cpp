@@ -97,23 +97,26 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		// Check for pickup object hit
 		if (IsHit)
 		{
-			DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1.f);
+			if (InteractWidget != nullptr)
+			{
+				InteractWidget->AddToViewport();
+			}
 		}
 		else
 		{
-			DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
+			// DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
 			UWidgetLayoutLibrary::RemoveAllWidgets(this);
 			
 			// don't uncomment the below, I think it will crash UE. Keeping it here as a reminder to find a way to remove a specific widget
 			// InteractWidget = nullptr;
 
 			// IsInViewport doesn't seem to work
-			if (InteractWidget->IsInViewport())
-			{
-				// Neither does this if you take it outside the condititional
-				InteractWidget->RemoveFromParent();
-				UE_LOG(LogTemp, Warning, TEXT("Interactive widget is in viewport"));
-			}
+			// if (InteractWidget->IsInViewport())
+			// {
+			// 	// Neither does this if you take it outside the condititional
+			// 	InteractWidget->RemoveFromParent();
+			// 	UE_LOG(LogTemp, Warning, TEXT("Interactive widget is in viewport"));
+			// }
 		}
 	}
 	// rearrange these conditionals - when statement? Switch case?
@@ -122,17 +125,11 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		TObjectPtr<ASwitch> Switch = Cast<ASwitch>(ObstacleHit.GetActor());
 		if (Switch)
 		{
-			DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.f);
-
 			UE_LOG(LogTemp, Warning, TEXT("Switch."));
 			if (InteractWidget != nullptr)
 			{
 				InteractWidget->AddToViewport();
 			}
-		}
-		else if (!Switch)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Not Switch"));
 		}
 	}
 
