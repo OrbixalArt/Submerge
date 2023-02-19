@@ -23,8 +23,15 @@ void UTriggerReactComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TriggerCompEventSource = TriggerActorEventSource->FindComponentByClass<UTriggerInteractionComponent>();
-
+	if(TriggerActorEventSource)
+	{
+		TriggerCompEventSource = TriggerActorEventSource->FindComponentByClass<UTriggerInteractionComponent>();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s does not have a event source assigned."), *FString(GetOwner()->GetName()));
+	}
+	
 	if (TriggerCompEventSource)
 	{
 		TriggerCompEventSource->OnActivation().AddUObject(this, &UTriggerReactComponent::ActivateActor);

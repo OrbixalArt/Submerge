@@ -19,6 +19,9 @@ public:
 	ATriggerActor();
 
 	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UBoxComponent> BoxComp;
+
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
 	UPROPERTY(EditAnywhere)
