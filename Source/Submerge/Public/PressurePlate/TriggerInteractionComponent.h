@@ -29,6 +29,9 @@ protected:
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UPROPERTY(EditAnywhere, Category = "Trigger Option")
+	bool OnlyPlayerCanUse = false;
+
 	bool Overlap = false;
 
 	void ActivateTrigger();
