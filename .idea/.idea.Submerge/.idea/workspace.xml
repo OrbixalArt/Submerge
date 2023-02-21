@@ -20,6 +20,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -254,6 +255,20 @@
       <updated>1674740964820</updated>
       <workItem from="1674740973451" duration="421000" />
       <workItem from="1675011728382" duration="353000" />
+      <workItem from="1675066923392" duration="1571000" />
+      <workItem from="1675095879298" duration="11585000" />
+      <workItem from="1675167995952" duration="4920000" />
+      <workItem from="1675356808746" duration="1226000" />
+      <workItem from="1675909834187" duration="651000" />
+      <workItem from="1676293076484" duration="1709000" />
+      <workItem from="1676296566168" duration="1041000" />
+      <workItem from="1676297666777" duration="602000" />
+      <workItem from="1676302576118" duration="5083000" />
+      <workItem from="1676333320921" duration="5240000" />
+      <workItem from="1676340597195" duration="1300000" />
+      <workItem from="1676457513849" duration="1195000" />
+      <workItem from="1676645664552" duration="12798000" />
+      <workItem from="1676773958210" duration="1001000" />
     </task>
     <servers />
   </component>

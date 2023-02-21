@@ -7,7 +7,11 @@
 void ASubmergePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
+void ASubmergePlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
 	PossessedCharacter = Cast<ASubmergePlayerCharacter>(GetPawn());
 }
 
@@ -21,12 +25,12 @@ void ASubmergePlayerController::SetupInputComponent()
 	InputComponent->BindAxis(FName("LookRight"), this, &ASubmergePlayerController::CallLookRight);
 
 	InputComponent->BindAction(FName("Interact"), IE_Pressed, this, &ASubmergePlayerController::CallGrab);
-	InputComponent->BindAction(FName("Interact"), IE_Released, this, &ASubmergePlayerController::CallRelease);
 }
 
 void ASubmergePlayerController::CallMoveForward(float Value)
 {
 	PossessedCharacter->MoveForward(Value);
+	// this is the same character from begin play
 }
 
 void ASubmergePlayerController::CallMoveRight(float Value)
@@ -49,7 +53,5 @@ void ASubmergePlayerController::CallGrab()
 	PossessedCharacter->Grab();
 }
 
-void ASubmergePlayerController::CallRelease()
-{
-	PossessedCharacter->Release();
-}
+
+// inside the tick get pawn and also leave in begin play

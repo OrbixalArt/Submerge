@@ -7,7 +7,8 @@
 #include "GrabComponent.generated.h"
 
 class UPhysicsHandleComponent;
-//class UInputComponent;
+class UCapsuleComponent;
+class UCameraComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SUBMERGE_API UGrabComponent : public UActorComponent
@@ -22,7 +23,18 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	// Widget
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> WidgetClass;
+
+	UPROPERTY(VisibleInstanceOnly)
+	class UInteractWidget* InteractWidget;
+
+	TObjectPtr<UPhysicsHandleComponent> PhysicsHandle = nullptr;
+	TObjectPtr<UCapsuleComponent> Capsule = nullptr;
+	TObjectPtr<UCameraComponent> Camera = nullptr;
+
+	TObjectPtr<UPrimitiveComponent> CollideComp;
 
 	UPROPERTY(EditAnywhere, Category = "Reach")
 		float InteractionDistance = 200.f;
@@ -30,13 +42,21 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Reach")
 		float HoldDistance = 120.f;
 
+	UPROPERTY(EditAnywhere, Category = "Reach")
+		float HoldHeight = 40.f;
+
+	size_t Iterations = 2;
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void Grab();
-	void Release();
 
 	bool HoldingObject = false;
+
+protected:
+	void PickUpObject();
+	void CheckIfObjectIsBelow(const FHitResult& HitResult, const FVector& Start, const FVector& End);
+	TArray<FHitResult> CheckCollisionUnderneath() const;
 
 };
