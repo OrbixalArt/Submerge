@@ -8,6 +8,9 @@
 #include "DrawDebugHelpers.h"
 #include "Components/CapsuleComponent.h"
 #include "Switch.h"
+#include "UI/InteractWidget.h"
+#include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
@@ -67,20 +70,81 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 	// raycast here - save reference - check if reference has changed
 	// use grab functionality to instead grab the saved reference object and don't call the raycast in that function.
+	
+	if (IsValid(WidgetClass))
+	{
+		InteractWidget = Cast<UInteractWidget>(CreateWidget(GetWorld(), WidgetClass));
+	}
+	
+	// Setup for linetrace
+	FVector Start = Camera->GetComponentLocation();
+	FVector End = (Camera->GetComponentRotation().Vector() * InteractionDistance) + Start;
+	FCollisionQueryParams CollisionParams(FName(TEXT("")), false, GetOwner());
 
+	// Check for pickup objects
+	FHitResult HitResult;
+	bool IsHit = GetWorld()->LineTraceSingleByObjectType(HitResult, Start, End,
+		ECC_PhysicsBody, CollisionParams);
+
+	// Check for objects in front of pickup objects
+	FHitResult ObstacleHit;
+	bool ObHit = GetWorld()->LineTraceSingleByObjectType(ObstacleHit, Start, End,
+		ECC_WorldStatic, CollisionParams);
+	
+	// Check for obstructing objects
+	if (!ObHit)
+	{
+		// Check for pickup object hit
+		if (IsHit)
+		{
+			if (InteractWidget != nullptr)
+			{
+				InteractWidget->AddToViewport();
+			}
+		}
+		else
+		{
+			// DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
+			UWidgetLayoutLibrary::RemoveAllWidgets(this);
+			
+			// don't uncomment the below, I think it will crash UE. Keeping it here as a reminder to find a way to remove a specific widget
+			// InteractWidget = nullptr;
+
+			// IsInViewport doesn't seem to work
+			// if (InteractWidget->IsInViewport())
+			// {
+			// 	// Neither does this if you take it outside the condititional
+			// 	InteractWidget->RemoveFromParent();
+			// 	UE_LOG(LogTemp, Warning, TEXT("Interactive widget is in viewport"));
+			// }
+		}
+	}
+	// rearrange these conditionals - when statement? Switch case?
+	else
+	{
+		TObjectPtr<ASwitch> Switch = Cast<ASwitch>(ObstacleHit.GetActor());
+		if (Switch)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Switch."));
+			if (InteractWidget != nullptr)
+			{
+				InteractWidget->AddToViewport();
+			}
+		}
+	}
 
 	if (HoldingObject)
 	{
 		if (Capsule)
 		{
-			FVector Start = Capsule->GetComponentLocation();
-			FVector End = (Capsule->GetComponentRotation().Vector() * HoldDistance) + Start;
+			FVector HoldStart = Capsule->GetComponentLocation();
+			FVector HoldEnd = (Capsule->GetComponentRotation().Vector() * HoldDistance) + HoldStart;
 
-			End.Z += HoldHeight;
+			HoldEnd.Z += HoldHeight;
 
 			if (PhysicsHandle->GrabbedComponent)
 			{
-				PhysicsHandle->SetTargetLocation(End);
+				PhysicsHandle->SetTargetLocation(HoldEnd);
 			}
 		}
 	}
@@ -142,6 +206,8 @@ void UGrabComponent::PickUpObject()
 			Switch->TurnOn();
 
 			UE_LOG(LogTemp, Warning, TEXT("Switch."));
+
+			
 		}
 	}
 }

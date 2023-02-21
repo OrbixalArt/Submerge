@@ -4,6 +4,7 @@
 #include "PressurePlate/TriggerInteractionComponent.h"
 #include "Components/BoxComponent.h"
 #include "PressurePlate/ActorMovementComponent.h"
+#include "SubmergePlayerCharacter.h"
 
 // Sets default values
 UTriggerInteractionComponent::UTriggerInteractionComponent()
@@ -26,19 +27,38 @@ void UTriggerInteractionComponent::BeginPlay()
 		Box->OnComponentBeginOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapBegin);
 		Box->OnComponentEndOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapEnd);
 	}
-
 }
 
 void UTriggerInteractionComponent::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	Overlap = true;
-
+	if (OnlyPlayerCanUse)
+	{
+		TObjectPtr<ASubmergePlayerCharacter> Player = Cast<ASubmergePlayerCharacter>(OtherActor);
+		if (Player)
+		{
+			Overlap = true;
+		}
+	}
+	else
+	{
+		Overlap = true;
+	}
 }
 
 void UTriggerInteractionComponent::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	Overlap = false;
-
+	if (OnlyPlayerCanUse)
+	{
+		TObjectPtr<ASubmergePlayerCharacter> Player = Cast<ASubmergePlayerCharacter>(OtherActor);
+		if (Player)
+		{
+			Overlap = false;
+		}
+	}
+	else
+	{
+		Overlap = false;
+	}
 }
 
 void UTriggerInteractionComponent::ActivateTrigger()
