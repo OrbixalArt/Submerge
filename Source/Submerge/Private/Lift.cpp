@@ -4,6 +4,7 @@
 #include "Lift.h"
 #include "Switch.h"
 #include "LiftMovementComponent.h"
+#include "LiftDoorComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -11,13 +12,13 @@
 ALift::ALift()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	Sphere = CreateDefaultSubobject<USphereComponent>(FName("Sphere"));
 	RootComponent = Sphere;
 
 	LiftMovementComponent = CreateDefaultSubobject<ULiftMovementComponent>(FName("LiftMovementComponent"));
-
+	LiftDoorComponent = CreateDefaultSubobject<ULiftDoorComponent>(FName("LiftDoorComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -40,16 +41,12 @@ void ALift::ActivateLift()
 {
 	if (!LiftMovementComponent->GetActiveState())
 	{
-		LiftMovementComponent->SetActiveState(true);
+		// LiftMovementComponent->SetActiveState(true);
+		LiftDoorComponent->SetDoorsActive(true);
+		LiftDoorComponent->ResetCounter();
+		LiftMovementComponent->SetNewLevel(true);
 		UE_LOG(LogTemp, Error, TEXT("Lift is on"));
 	}
-
-}
-
-// Called every frame
-void ALift::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
 }
 

@@ -4,14 +4,13 @@
 #include "PressurePlate/TriggerInteractionComponent.h"
 #include "Components/BoxComponent.h"
 #include "PressurePlate/ActorMovementComponent.h"
+#include "SubmergePlayerCharacter.h"
 
 // Sets default values
 UTriggerInteractionComponent::UTriggerInteractionComponent()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	Box = CreateDefaultSubobject<UBoxComponent>(FName("Box"));
 
 	ActorMoveComp = CreateDefaultSubobject<UActorMovementComponent>(FName("ActorMoveComp"));
 }
@@ -21,21 +20,45 @@ void UTriggerInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Box->OnComponentBeginOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapBegin);
-	Box->OnComponentEndOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapEnd);
-
+	Box = GetOwner()->FindComponentByClass<UBoxComponent>();
+	
+	if(Box)
+	{
+		Box->OnComponentBeginOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapBegin);
+		Box->OnComponentEndOverlap.AddDynamic(this, &UTriggerInteractionComponent::OnOverlapEnd);
+	}
 }
 
 void UTriggerInteractionComponent::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	Overlap = true;
-
+	if (OnlyPlayerCanUse)
+	{
+		TObjectPtr<ASubmergePlayerCharacter> Player = Cast<ASubmergePlayerCharacter>(OtherActor);
+		if (Player)
+		{
+			Overlap = true;
+		}
+	}
+	else
+	{
+		Overlap = true;
+	}
 }
 
 void UTriggerInteractionComponent::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	Overlap = false;
-
+	if (OnlyPlayerCanUse)
+	{
+		TObjectPtr<ASubmergePlayerCharacter> Player = Cast<ASubmergePlayerCharacter>(OtherActor);
+		if (Player)
+		{
+			Overlap = false;
+		}
+	}
+	else
+	{
+		Overlap = false;
+	}
 }
 
 void UTriggerInteractionComponent::ActivateTrigger()
