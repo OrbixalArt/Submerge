@@ -105,7 +105,7 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		else
 		{
 			// DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
-			UWidgetLayoutLibrary::RemoveAllWidgets(this);
+			// InteractWidget->RemoveFromParent();
 			
 			// don't uncomment the below, I think it will crash UE. Keeping it here as a reminder to find a way to remove a specific widget
 			// InteractWidget = nullptr;
