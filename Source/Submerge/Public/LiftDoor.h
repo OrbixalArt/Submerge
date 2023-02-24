@@ -19,7 +19,4 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "Door Mesh")
-		TObjectPtr<UStaticMeshComponent> Mesh;
-
 };

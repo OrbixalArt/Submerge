@@ -112,6 +112,10 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 			if (InteractWidget != nullptr)
 			{
 				InteractWidget->RemoveFromParent();
+				if (InteractWidget == nullptr)
+				{
+					
+				}
 			}
 		}
 	}
