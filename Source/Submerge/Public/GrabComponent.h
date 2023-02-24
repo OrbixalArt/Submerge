@@ -59,4 +59,8 @@ protected:
 	void CheckIfObjectIsBelow(const FHitResult& HitResult, const FVector& Start, const FVector& End);
 	TArray<FHitResult> CheckCollisionUnderneath() const;
 
+	UPROPERTY(EditAnywhere)
+	class USoundBase* PickUpSound;
+	UPROPERTY(EditAnywhere)
+    class USoundBase* PutDownSound;
 };

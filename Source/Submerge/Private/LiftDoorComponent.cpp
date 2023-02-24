@@ -4,6 +4,8 @@
 #include "LiftDoorComponent.h"
 #include "LiftDoor.h"
 #include "LiftMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/Soundbase.h"
 
 
 // Sets default values for this component's properties
@@ -53,6 +55,7 @@ void ULiftDoorComponent::MoveDoors()
 		if (LiftDoors)
 		{
 			LiftDoors->SetActorLocation(CurrentLocation);
+			UGameplayStatics::SpawnSoundAtLocation(this, LiftDoorSound, LiftDoors->GetActorLocation());
 		}
 
 	}
@@ -73,6 +76,7 @@ void ULiftDoorComponent::MoveDoorsBack()
 		if (LiftDoors)
 		{
 			LiftDoors->SetActorLocation(CurrentLocation);
+			UGameplayStatics::SpawnSoundAtLocation(this, LiftDoorSound, LiftDoors->GetActorLocation());
 		}
 
 		if (CurrentNegationTime == TimeToMove)

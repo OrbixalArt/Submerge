@@ -11,6 +11,8 @@
 #include "UI/InteractWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/Soundbase.h"
 
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
@@ -154,6 +156,7 @@ void UGrabComponent::Grab()
 		PhysicsHandle->GrabbedComponent->SetCollisionProfileName(FName("PhysicsActor"));
 		PhysicsHandle->ReleaseComponent();
 		HoldingObject = false;
+		// UGameplayStatics::SpawnSoundAtLocation(this, PutDownSound, PhysicsHandle->GrabbedComponent->GetComponentLocation());
 	}
 	else
 	{
@@ -188,6 +191,7 @@ void UGrabComponent::PickUpObject()
 		if (IsHit)
 		{
 			CheckIfObjectIsBelow(HitResult, Start, End);
+			UGameplayStatics::SpawnSoundAtLocation(this, PickUpSound, FVector(End));
 		}
 		else
 		{
