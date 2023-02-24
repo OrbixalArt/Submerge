@@ -3,6 +3,10 @@
 
 #include "Switch.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Sound/Soundbase.h"
+#include "Sound/SoundNodeSwitch.h"
+
 // Sets default values
 ASwitch::ASwitch()
 {
@@ -26,6 +30,7 @@ void ASwitch::TurnOn()
 		LiftSwitchedOn.Broadcast();
 		UE_LOG(LogTemp, Warning, TEXT("Switch is turned on."));
 		// Broadcast event to lift
+		UGameplayStatics::SpawnSoundAtLocation(this, SwitchSound, GetActorLocation());
 	}
 }
 
