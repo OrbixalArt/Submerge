@@ -21,7 +21,15 @@ void ULiftDoorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	LiftDoors->SetActorLocation(GetOwner()->GetActorLocation());
+	if(LiftDoors)
+	{
+		LiftDoors->SetActorLocation(GetOwner()->GetActorLocation());
+		LiftDoors->SetActorRotation(GetOwner()->GetActorRotation());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("LiftDoorComponent does not have a Lift Doors Object selected."));
+	}
 
 	LiftMoveComp = GetOwner()->FindComponentByClass<ULiftMovementComponent>();
 	if (LiftMoveComp)
@@ -41,7 +49,11 @@ void ULiftDoorComponent::MoveDoors()
 		const float TimeRatio = FMath::Clamp(CurrentMovementTime / TimeToMove, 0.0f, 1.0f);
 		const float MovementAlpha = MovementCurve.GetRichCurveConst()->Eval(TimeRatio);
 		const FVector CurrentLocation = FMath::Lerp(StartLocation, NextLocation, MovementAlpha);
-		LiftDoors->SetActorLocation(CurrentLocation);
+		
+		if (LiftDoors)
+		{
+			LiftDoors->SetActorLocation(CurrentLocation);
+		}
 
 	}
 }
@@ -57,7 +69,11 @@ void ULiftDoorComponent::MoveDoorsBack()
 		const float TimeRatio = FMath::Clamp(CurrentNegationTime / TimeToMove, 0.0f, 1.0f);
 		const float MovementAlpha = MovementCurve.GetRichCurveConst()->Eval(TimeRatio);
 		const FVector CurrentLocation = FMath::Lerp(NextLocation, StartLocation, MovementAlpha);
-		LiftDoors->SetActorLocation(CurrentLocation);
+
+		if (LiftDoors)
+		{
+			LiftDoors->SetActorLocation(CurrentLocation);
+		}
 
 		if (CurrentNegationTime == TimeToMove)
 		{
@@ -85,7 +101,10 @@ void ULiftDoorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 	if (LiftIsMoving)
 	{
-		LiftDoors->SetActorLocation(GetOwner()->GetActorLocation());
+		if (LiftDoors)
+		{
+			LiftDoors->SetActorLocation(GetOwner()->GetActorLocation());
+		}
 	}
 	else
 	{

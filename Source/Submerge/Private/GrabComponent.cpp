@@ -71,11 +71,6 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// raycast here - save reference - check if reference has changed
 	// use grab functionality to instead grab the saved reference object and don't call the raycast in that function.
 	
-	if (IsValid(WidgetClass))
-	{
-		InteractWidget = Cast<UInteractWidget>(CreateWidget(GetWorld(), WidgetClass));
-	}
-	
 	// Setup for linetrace
 	FVector Start = Camera->GetComponentLocation();
 	FVector End = (Camera->GetComponentRotation().Vector() * InteractionDistance) + Start;
@@ -97,6 +92,14 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		// Check for pickup object hit
 		if (IsHit)
 		{
+			if (InteractWidget == nullptr)
+			{
+				if (IsValid(WidgetClass))
+				{
+					InteractWidget = Cast<UInteractWidget>(CreateWidget(GetWorld(), WidgetClass));
+				}
+			}
+			
 			if (InteractWidget != nullptr)
 			{
 				InteractWidget->AddToViewport();
@@ -105,18 +108,11 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		else
 		{
 			// DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
-			UWidgetLayoutLibrary::RemoveAllWidgets(this);
 			
-			// don't uncomment the below, I think it will crash UE. Keeping it here as a reminder to find a way to remove a specific widget
-			// InteractWidget = nullptr;
-
-			// IsInViewport doesn't seem to work
-			// if (InteractWidget->IsInViewport())
-			// {
-			// 	// Neither does this if you take it outside the condititional
-			// 	InteractWidget->RemoveFromParent();
-			// 	UE_LOG(LogTemp, Warning, TEXT("Interactive widget is in viewport"));
-			// }
+			if (InteractWidget != nullptr)
+			{
+				InteractWidget->RemoveFromParent();
+			}
 		}
 	}
 	// rearrange these conditionals - when statement? Switch case?
