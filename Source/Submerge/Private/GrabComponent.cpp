@@ -94,18 +94,7 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		// Check for pickup object hit
 		if (IsHit)
 		{
-			if (InteractWidget == nullptr)
-			{
-				if (IsValid(WidgetClass))
-				{
-					InteractWidget = Cast<UInteractWidget>(CreateWidget(GetWorld(), WidgetClass));
-				}
-			}
-			
-			if (InteractWidget != nullptr)
-			{
-				InteractWidget->AddToViewport();
-			}
+			AddInteractWidget();
 		}
 		else
 		{
@@ -124,10 +113,8 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		if (Switch)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Switch."));
-			if (InteractWidget != nullptr)
-			{
-				InteractWidget->AddToViewport();
-			}
+
+			AddInteractWidget();
 		}
 	}
 
@@ -156,7 +143,10 @@ void UGrabComponent::Grab()
 		PhysicsHandle->GrabbedComponent->SetCollisionProfileName(FName("PhysicsActor"));
 		PhysicsHandle->ReleaseComponent();
 		HoldingObject = false;
-		// UGameplayStatics::SpawnSoundAtLocation(this, PutDownSound, PhysicsHandle->GrabbedComponent->GetComponentLocation());
+		
+		FVector Start = Camera->GetComponentLocation();
+		FVector End = (Camera->GetComponentRotation().Vector() * InteractionDistance) + Start;
+		UGameplayStatics::SpawnSoundAtLocation(this, PutDownSound, End);
 	}
 	else
 	{
@@ -206,8 +196,6 @@ void UGrabComponent::PickUpObject()
 			Switch->TurnOn();
 
 			UE_LOG(LogTemp, Warning, TEXT("Switch."));
-
-			
 		}
 	}
 }
@@ -231,6 +219,22 @@ void UGrabComponent::CheckIfObjectIsBelow(const FHitResult& HitResult, const FVe
 		PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, FName("NAME_None"), HitResult.Location, ComponentToGrab->GetComponentRotation());
 
 		HoldingObject = true;
+	}
+}
+
+void UGrabComponent::AddInteractWidget()
+{
+	if (InteractWidget == nullptr)
+	{
+		if (IsValid(WidgetClass))
+		{
+			InteractWidget = Cast<UInteractWidget>(CreateWidget(GetWorld(), WidgetClass));
+		}
+	}
+			
+	if (InteractWidget != nullptr)
+	{
+		InteractWidget->AddToViewport();
 	}
 }
 
