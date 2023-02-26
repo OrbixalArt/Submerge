@@ -55,9 +55,8 @@ void ULiftDoorComponent::MoveDoors()
 		if (LiftDoors)
 		{
 			LiftDoors->SetActorLocation(CurrentLocation);
-			UGameplayStatics::SpawnSoundAtLocation(this, LiftDoorSound, LiftDoors->GetActorLocation());
+			UGameplayStatics::SpawnSoundAtLocation(this, LiftDoorSound, GetOwner()->GetActorLocation());
 		}
-
 	}
 }
 
@@ -76,7 +75,7 @@ void ULiftDoorComponent::MoveDoorsBack()
 		if (LiftDoors)
 		{
 			LiftDoors->SetActorLocation(CurrentLocation);
-			UGameplayStatics::SpawnSoundAtLocation(this, LiftDoorSound, LiftDoors->GetActorLocation());
+			UGameplayStatics::SpawnSoundAtLocation(this, LiftDoorSound, GetOwner()->GetActorLocation());
 		}
 
 		if (CurrentNegationTime == TimeToMove)

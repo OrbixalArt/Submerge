@@ -99,7 +99,8 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		else
 		{
 			// DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
-			
+
+			// move this widget removal to a conditional where it should consistently be removed.
 			if (InteractWidget != nullptr)
 			{
 				InteractWidget->RemoveFromParent();
