@@ -69,7 +69,7 @@ void ULiftDoorComponent::MoveDoorsBack()
 {
 	if (CurrentMovementTime > 0.f)
 	{
-		if (CurrentMovementTime >= 1)
+		if (CurrentMovementTime >= TimeToMove)
 		{
 			UGameplayStatics::SpawnSoundAtLocation(this, LiftDoorSound, GetOwner()->GetActorLocation());
 		}
