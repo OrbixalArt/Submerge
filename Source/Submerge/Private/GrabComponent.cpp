@@ -62,7 +62,6 @@ void UGrabComponent::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("No Physics Handle found"));
 	}
-
 }
 
 // Called every frame
