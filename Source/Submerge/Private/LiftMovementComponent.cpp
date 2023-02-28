@@ -52,6 +52,10 @@ void ULiftMovementComponent::UpdateLevelAndLocation()
 			StartLocation = NextLocation;
 			NextLocation = StartLocation + FVector(0.f, 0.f, Levels[CurrentLevel + 1]);
 		}
+		else
+		{
+			IncrementCounter();
+		}
 
 		SetActiveState(false);
 		LiftDoors->SetLiftMoving(false);

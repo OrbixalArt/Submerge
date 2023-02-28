@@ -2,6 +2,8 @@
 
 
 #include "PressurePlate/ActorMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/Soundbase.h"
 
 // Sets default values for this component's properties
 UActorMovementComponent::UActorMovementComponent()
@@ -24,6 +26,11 @@ void UActorMovementComponent::Move()
 {
 	if (CurrentMovementTime != TimeToMove)
 	{
+		if (CurrentMovementTime <= 0)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(this, MovementSound, GetOwner()->GetActorLocation());
+		}
+
 		CurrentMovementTime = FMath::Clamp(CurrentMovementTime + GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);
 
 		NegationMovementTime = FMath::Clamp(NegationMovementTime - GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);
@@ -44,6 +51,11 @@ void UActorMovementComponent::MoveBack()
 {
 	if (CurrentMovementTime != 0.f)
 	{
+		if (CurrentMovementTime >= TimeToMove)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(this, MovementSound, GetOwner()->GetActorLocation());
+		}
+
 		CurrentMovementTime = FMath::Clamp(CurrentMovementTime - GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);
 
 		NegationMovementTime = FMath::Clamp(NegationMovementTime + GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);

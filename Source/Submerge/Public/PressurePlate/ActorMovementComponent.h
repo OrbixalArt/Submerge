@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Trigger Movement")
 		float TimeToMove = 1.f;
 
+	UPROPERTY(EditAnywhere, Category = "Trigger Movement")
+		class USoundBase* MovementSound;
+
 	float CurrentMovementTime = 0.f;
 	float NegationMovementTime = TimeToMove;
 
