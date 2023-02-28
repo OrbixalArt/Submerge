@@ -4,6 +4,8 @@
 #include "LiftDoorComponent.h"
 #include "LiftDoor.h"
 #include "LiftMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/Soundbase.h"
 
 
 // Sets default values for this component's properties
@@ -42,6 +44,11 @@ void ULiftDoorComponent::MoveDoors()
 {
 	if ((CurrentMovementTime < TimeToMove))
 	{
+		if (CurrentMovementTime <= 0)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(this, LiftDoorSound, GetOwner()->GetActorLocation());
+		}
+
 		UE_LOG(LogTemp, Error, TEXT("MoveDoor Branch: %f"), CurrentMovementTime);
 		CurrentMovementTime = FMath::Clamp(CurrentMovementTime + GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);
 		CurrentNegationTime = FMath::Clamp(CurrentNegationTime - GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);
@@ -50,11 +57,11 @@ void ULiftDoorComponent::MoveDoors()
 		const float MovementAlpha = MovementCurve.GetRichCurveConst()->Eval(TimeRatio);
 		const FVector CurrentLocation = FMath::Lerp(StartLocation, NextLocation, MovementAlpha);
 		
+
 		if (LiftDoors)
 		{
 			LiftDoors->SetActorLocation(CurrentLocation);
 		}
-
 	}
 }
 
@@ -62,6 +69,11 @@ void ULiftDoorComponent::MoveDoorsBack()
 {
 	if (CurrentMovementTime > 0.f)
 	{
+		if (CurrentMovementTime >= TimeToMove)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(this, LiftDoorSound, GetOwner()->GetActorLocation());
+		}
+
 		UE_LOG(LogTemp, Error, TEXT("MoveDoorBack Branch: %f"), CurrentMovementTime);
 		CurrentMovementTime = FMath::Clamp(CurrentMovementTime - GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);
 		CurrentNegationTime = FMath::Clamp(CurrentNegationTime + GetWorld()->DeltaTimeSeconds, 0.0f, TimeToMove);

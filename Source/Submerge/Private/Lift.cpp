@@ -21,6 +21,16 @@ ALift::ALift()
 	LiftDoorComponent = CreateDefaultSubobject<ULiftDoorComponent>(FName("LiftDoorComponent"));
 }
 
+int ALift::GetCurrentGameLevel()
+{
+	return LiftMovementComponent->GetCurrentLevel();
+}
+
+int ALift::GetNumberOfLevels()
+{
+	return LiftMovementComponent->GetNumberOfLevels();
+}
+
 // Called when the game starts or when spawned
 void ALift::BeginPlay()
 {

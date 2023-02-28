@@ -33,6 +33,10 @@ public:
 	bool GetNewLevel() { return NewLevel; }
 	void SetNewLevel(bool State) { NewLevel = State; }
 
+	UFUNCTION(BlueprintCallable)
+	int GetCurrentLevel() { return CurrentLevel; }
+
+	int GetNumberOfLevels() { return NumberOfLevels; }
 
 protected:
 	// Called when the game starts
@@ -46,7 +50,7 @@ protected:
 
 	bool LiftActivated = false;
 
-	unsigned int CurrentLevel = 0;
+	int CurrentLevel = 0;
 
 	FVector StartLocation = FVector::ZeroVector;
 	FVector NextLocation = FVector::ZeroVector;
@@ -57,7 +61,7 @@ protected:
 		float TimeToMove = 5.f;
 
 	UPROPERTY(EditAnywhere, Category = "Levels")
-		unsigned int NumberOfLevels = 4;
+		int NumberOfLevels = 4;
 
 	UPROPERTY(EditAnywhere, Category = "Levels")
 		TArray<float> Levels;

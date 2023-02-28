@@ -60,6 +60,9 @@ protected:
 
 	void NewLevel();
 
+	UPROPERTY(EditAnywhere)
+	class USoundBase* LiftDoorSound;
+	
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

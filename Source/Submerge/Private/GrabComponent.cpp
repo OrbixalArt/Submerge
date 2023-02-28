@@ -11,6 +11,8 @@
 #include "UI/InteractWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/Soundbase.h"
 
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
@@ -92,23 +94,13 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		// Check for pickup object hit
 		if (IsHit)
 		{
-			if (InteractWidget == nullptr)
-			{
-				if (IsValid(WidgetClass))
-				{
-					InteractWidget = Cast<UInteractWidget>(CreateWidget(GetWorld(), WidgetClass));
-				}
-			}
-			
-			if (InteractWidget != nullptr)
-			{
-				InteractWidget->AddToViewport();
-			}
+			AddInteractWidget();
 		}
 		else
 		{
 			// DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
-			
+
+			// move this widget removal to a conditional where it should consistently be removed.
 			if (InteractWidget != nullptr)
 			{
 				InteractWidget->RemoveFromParent();
@@ -122,10 +114,8 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		if (Switch)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Switch."));
-			if (InteractWidget != nullptr)
-			{
-				InteractWidget->AddToViewport();
-			}
+
+			AddInteractWidget();
 		}
 	}
 
@@ -154,6 +144,10 @@ void UGrabComponent::Grab()
 		PhysicsHandle->GrabbedComponent->SetCollisionProfileName(FName("PhysicsActor"));
 		PhysicsHandle->ReleaseComponent();
 		HoldingObject = false;
+		
+		FVector Start = Camera->GetComponentLocation();
+		FVector End = (Camera->GetComponentRotation().Vector() * InteractionDistance) + Start;
+		UGameplayStatics::SpawnSoundAtLocation(this, PutDownSound, End);
 	}
 	else
 	{
@@ -188,6 +182,7 @@ void UGrabComponent::PickUpObject()
 		if (IsHit)
 		{
 			CheckIfObjectIsBelow(HitResult, Start, End);
+			UGameplayStatics::SpawnSoundAtLocation(this, PickUpSound, FVector(End));
 		}
 		else
 		{
@@ -202,8 +197,6 @@ void UGrabComponent::PickUpObject()
 			Switch->TurnOn();
 
 			UE_LOG(LogTemp, Warning, TEXT("Switch."));
-
-			
 		}
 	}
 }
@@ -227,6 +220,22 @@ void UGrabComponent::CheckIfObjectIsBelow(const FHitResult& HitResult, const FVe
 		PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, FName("NAME_None"), HitResult.Location, ComponentToGrab->GetComponentRotation());
 
 		HoldingObject = true;
+	}
+}
+
+void UGrabComponent::AddInteractWidget()
+{
+	if (InteractWidget == nullptr)
+	{
+		if (IsValid(WidgetClass))
+		{
+			InteractWidget = Cast<UInteractWidget>(CreateWidget(GetWorld(), WidgetClass));
+		}
+	}
+			
+	if (InteractWidget != nullptr)
+	{
+		InteractWidget->AddToViewport();
 	}
 }
 

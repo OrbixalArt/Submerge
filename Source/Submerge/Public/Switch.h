@@ -41,4 +41,6 @@ protected:
 	//
 	//FSwitchedOn SwitchedOn;
 
+	UPROPERTY(EditAnywhere)
+	class USoundBase* SwitchSound;
 };
