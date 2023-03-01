@@ -79,10 +79,7 @@ void ULiftMovementComponent::MoveLift()
 	if (LiftActivated)
 	{
 		LiftDoors->SetLiftMoving(true);
-		if (!PlayerCharacter)
-		{
-			PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
-		}
+		PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
 
 		if ((CurrentMovementTime != TimeToMove) && OwnerSphereComponent->IsOverlappingActor(PlayerCharacter))
 		{
@@ -98,10 +95,7 @@ void ULiftMovementComponent::MoveLift()
 	}
 	else
 	{
-		if (!PlayerCharacter)
-		{
-			PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
-		}
+		PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawn();
 
 		if (PlayerCharacter)
 		{
