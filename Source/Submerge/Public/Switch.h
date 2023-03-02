@@ -27,9 +27,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FLiftSwitchedOn LiftSwitchedOn;
 
-	//DECLARE_EVENT(ASwitch, FSwitchedOn)
-	//	FSwitchedOn& OnSwitchedOn() { return SwitchedOn; }
-
 	UFUNCTION(BlueprintCallable)
 	void TurnOn();
 
@@ -37,9 +34,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadOnly)
 	ESwitchState SwitchState = ESwitchState::E_Off;
-	//
-	//FSwitchedOn SwitchedOn;
 
 	UPROPERTY(EditAnywhere)
 	class USoundBase* SwitchSound;

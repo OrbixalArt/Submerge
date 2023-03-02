@@ -19,6 +19,8 @@ ALift::ALift()
 
 	LiftMovementComponent = CreateDefaultSubobject<ULiftMovementComponent>(FName("LiftMovementComponent"));
 	LiftDoorComponent = CreateDefaultSubobject<ULiftDoorComponent>(FName("LiftDoorComponent"));
+
+
 }
 
 int ALift::GetCurrentGameLevel()
@@ -36,14 +38,18 @@ void ALift::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TArray<TObjectPtr<AActor>> SwitchesInGame;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASwitch::StaticClass(), SwitchesInGame);
+	// TArray<TObjectPtr<AActor>> SwitchesInGame;
+	// UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASwitch::StaticClass(), SwitchesInGame);
 
 	for (int i = 0; i < SwitchesInGame.Num();i++)
 	{
 		TObjectPtr<ASwitch> Switch = Cast<ASwitch>(SwitchesInGame[i]);
-		Switch->LiftSwitchedOn.AddDynamic(this, &ALift::ActivateLift);
-		UE_LOG(LogTemp, Error, TEXT("Switch binding."));
+		if(IsValid(Switch))
+		{
+			Switch->LiftSwitchedOn.AddDynamic(this, &ALift::ActivateLift);
+			UKismetSystemLibrary::PrintString(GetWorld(), FString("This is binding"), true, false, FLinearColor::Red, 4.f);
+			UE_LOG(LogTemp, Error, TEXT("Switch binding."));
+		}
 	}	
 }
 
