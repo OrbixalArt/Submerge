@@ -49,6 +49,9 @@ protected:
 		4: Lift reaches next level -> Lift is inactive -> Doors down */
 
 	UPROPERTY(EditAnywhere)
+		TArray<TObjectPtr<AActor>> SwitchesInGame;
+
+	UPROPERTY(EditAnywhere)
 		TObjectPtr<ULiftMovementComponent> LiftMovementComponent;
 
 	UPROPERTY(EditAnywhere)

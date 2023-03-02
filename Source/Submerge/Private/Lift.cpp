@@ -36,14 +36,17 @@ void ALift::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TArray<TObjectPtr<AActor>> SwitchesInGame;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASwitch::StaticClass(), SwitchesInGame);
 
 	for (int i = 0; i < SwitchesInGame.Num();i++)
 	{
 		TObjectPtr<ASwitch> Switch = Cast<ASwitch>(SwitchesInGame[i]);
-		Switch->LiftSwitchedOn.AddDynamic(this, &ALift::ActivateLift);
-		UE_LOG(LogTemp, Error, TEXT("Switch binding."));
+
+		if (IsValid(Switch))
+		{
+			Switch->LiftSwitchedOn.AddDynamic(this, &ALift::ActivateLift);
+			UE_LOG(LogTemp, Error, TEXT("Switch binding."));
+		}
 	}	
 }
 
