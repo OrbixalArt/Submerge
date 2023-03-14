@@ -23,6 +23,13 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	// Widget
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> WidgetClass;
+
+	UPROPERTY(VisibleInstanceOnly)
+	class UInteractWidget* InteractWidget;
+
 	TObjectPtr<UPhysicsHandleComponent> PhysicsHandle = nullptr;
 	TObjectPtr<UCapsuleComponent> Capsule = nullptr;
 	TObjectPtr<UCameraComponent> Camera = nullptr;
@@ -44,6 +51,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void Grab();
+	void AddInteractWidget();
 
 	bool HoldingObject = false;
 
@@ -52,4 +60,8 @@ protected:
 	void CheckIfObjectIsBelow(const FHitResult& HitResult, const FVector& Start, const FVector& End);
 	TArray<FHitResult> CheckCollisionUnderneath() const;
 
+	UPROPERTY(EditAnywhere)
+	class USoundBase* PickUpSound;
+	UPROPERTY(EditAnywhere)
+    class USoundBase* PutDownSound;
 };

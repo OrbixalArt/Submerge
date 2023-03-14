@@ -7,6 +7,7 @@
 #include "LiftMovementComponent.generated.h"
 
 class USphereComponent;
+class ULiftDoorComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SUBMERGE_API ULiftMovementComponent : public UActorComponent
@@ -20,8 +21,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	//DECLARE_EVENT(ULiftMovementComponent, FReachedNewLevel)
-	//	FReachedNewLevel& NewLevelReached() { return ReachedNewLevel; }
+	DECLARE_EVENT(ULiftMovementComponent, FReachedNewLevel)
+		FReachedNewLevel& NewLevelReached() { return ReachedNewLevel; }
 
 	void MoveLift();
 	void IncrementCounter() { CurrentLevel++; }
@@ -29,16 +30,27 @@ public:
 	bool GetActiveState() { return LiftActivated; }
 	void SetActiveState(bool State) { LiftActivated = State; }
 
+	bool GetNewLevel() { return NewLevel; }
+	void SetNewLevel(bool State) { NewLevel = State; }
+
+	UFUNCTION(BlueprintCallable)
+	int GetCurrentLevel() { return CurrentLevel; }
+
+	int GetNumberOfLevels() { return NumberOfLevels; }
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	void ActivateLift();
+
 	TObjectPtr<APawn> PlayerCharacter;
 	TObjectPtr<USphereComponent> OwnerSphereComponent;
+	TObjectPtr<ULiftDoorComponent> LiftDoors;
 
 	bool LiftActivated = false;
 
-	unsigned int CurrentLevel = 0;
+	int CurrentLevel = 0;
 
 	FVector StartLocation = FVector::ZeroVector;
 	FVector NextLocation = FVector::ZeroVector;
@@ -49,7 +61,7 @@ protected:
 		float TimeToMove = 5.f;
 
 	UPROPERTY(EditAnywhere, Category = "Levels")
-		unsigned int NumberOfLevels = 4;
+		int NumberOfLevels = 4;
 
 	UPROPERTY(EditAnywhere, Category = "Levels")
 		TArray<float> Levels;
@@ -57,7 +69,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Levels")
 		FRuntimeFloatCurve MovementCurve;
 
-	//FReachedNewLevel ReachedNewLevel;
+	FReachedNewLevel ReachedNewLevel;
+
+	bool NewLevel = false;
 
 	void UpdateLevelAndLocation();
 };

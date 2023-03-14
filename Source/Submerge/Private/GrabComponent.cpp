@@ -8,6 +8,11 @@
 #include "DrawDebugHelpers.h"
 #include "Components/CapsuleComponent.h"
 #include "Switch.h"
+#include "UI/InteractWidget.h"
+#include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/Soundbase.h"
 
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
@@ -57,7 +62,6 @@ void UGrabComponent::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("No Physics Handle found"));
 	}
-
 }
 
 // Called every frame
@@ -65,18 +69,67 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	// raycast here - save reference - check if reference has changed
+	// use grab functionality to instead grab the saved reference object and don't call the raycast in that function.
+	
+	// Setup for linetrace
+	FVector Start = Camera->GetComponentLocation();
+	FVector End = (Camera->GetComponentRotation().Vector() * InteractionDistance) + Start;
+	FCollisionQueryParams CollisionParams(FName(TEXT("")), false, GetOwner());
+
+	// Check for pickup objects
+	FHitResult HitResult;
+	bool IsHit = GetWorld()->LineTraceSingleByObjectType(HitResult, Start, End,
+		ECC_PhysicsBody, CollisionParams);
+
+	// Check for objects in front of pickup objects
+	FHitResult ObstacleHit;
+	bool ObHit = GetWorld()->LineTraceSingleByObjectType(ObstacleHit, Start, End,
+		ECC_WorldStatic, CollisionParams);
+	
+	// Check for obstructing objects
+	if (!ObHit)
+	{
+		// Check for pickup object hit
+		if (IsHit)
+		{
+			AddInteractWidget();
+		}
+		else
+		{
+			// DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
+
+			// move this widget removal to a conditional where it should consistently be removed.
+			if (InteractWidget != nullptr)
+			{
+				InteractWidget->RemoveFromParent();
+			}
+		}
+	}
+	// rearrange these conditionals - when statement? Switch case?
+	else
+	{
+		TObjectPtr<ASwitch> Switch = Cast<ASwitch>(ObstacleHit.GetActor());
+		if (Switch)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Switch."));
+
+			AddInteractWidget();
+		}
+	}
+
 	if (HoldingObject)
 	{
 		if (Capsule)
 		{
-			FVector Start = Capsule->GetComponentLocation();
-			FVector End = (Capsule->GetComponentRotation().Vector() * HoldDistance) + Start;
+			FVector HoldStart = Capsule->GetComponentLocation();
+			FVector HoldEnd = (Capsule->GetComponentRotation().Vector() * HoldDistance) + HoldStart;
 
-			End.Z += HoldHeight;
+			HoldEnd.Z += HoldHeight;
 
 			if (PhysicsHandle->GrabbedComponent)
 			{
-				PhysicsHandle->SetTargetLocation(End);
+				PhysicsHandle->SetTargetLocation(HoldEnd);
 			}
 		}
 	}
@@ -90,6 +143,10 @@ void UGrabComponent::Grab()
 		PhysicsHandle->GrabbedComponent->SetCollisionProfileName(FName("PhysicsActor"));
 		PhysicsHandle->ReleaseComponent();
 		HoldingObject = false;
+		
+		FVector Start = Camera->GetComponentLocation();
+		FVector End = (Camera->GetComponentRotation().Vector() * InteractionDistance) + Start;
+		UGameplayStatics::SpawnSoundAtLocation(this, PutDownSound, End);
 	}
 	else
 	{
@@ -124,6 +181,7 @@ void UGrabComponent::PickUpObject()
 		if (IsHit)
 		{
 			CheckIfObjectIsBelow(HitResult, Start, End);
+			UGameplayStatics::SpawnSoundAtLocation(this, PickUpSound, FVector(End));
 		}
 		else
 		{
@@ -161,6 +219,22 @@ void UGrabComponent::CheckIfObjectIsBelow(const FHitResult& HitResult, const FVe
 		PhysicsHandle->GrabComponentAtLocationWithRotation(ComponentToGrab, FName("NAME_None"), HitResult.Location, ComponentToGrab->GetComponentRotation());
 
 		HoldingObject = true;
+	}
+}
+
+void UGrabComponent::AddInteractWidget()
+{
+	if (InteractWidget == nullptr)
+	{
+		if (IsValid(WidgetClass))
+		{
+			InteractWidget = Cast<UInteractWidget>(CreateWidget(GetWorld(), WidgetClass));
+		}
+	}
+			
+	if (InteractWidget != nullptr)
+	{
+		InteractWidget->AddToViewport();
 	}
 }
 

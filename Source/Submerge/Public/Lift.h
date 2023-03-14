@@ -7,6 +7,7 @@
 #include "Lift.generated.h"
 
 class ULiftMovementComponent;
+class ULiftDoorComponent;
 class USphereComponent;
 
 UCLASS()
@@ -17,6 +18,12 @@ class SUBMERGE_API ALift : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ALift();
+
+	UFUNCTION(BlueprintCallable)
+		int GetCurrentGameLevel();
+
+	UFUNCTION(BlueprintCallable)
+		int GetNumberOfLevels();
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,13 +49,15 @@ protected:
 		4: Lift reaches next level -> Lift is inactive -> Doors down */
 
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<ULiftMovementComponent> LiftMovementComponent;
+		TArray<TObjectPtr<AActor>> SwitchesInGame;
 
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<USphereComponent> Sphere;
+		TObjectPtr<ULiftMovementComponent> LiftMovementComponent;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere)
+		TObjectPtr<USphereComponent> Sphere;
+
+	UPROPERTY(EditAnywhere)
+		TObjectPtr<ULiftDoorComponent> LiftDoorComponent;
 
 };
