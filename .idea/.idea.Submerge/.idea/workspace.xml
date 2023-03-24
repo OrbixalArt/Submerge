@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cf290d56-0eef-4264-bdb0-0d33cce833ed" name="Changes" comment="" />
+    <list default="true" id="cf290d56-0eef-4264-bdb0-0d33cce833ed" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Submerge/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Submerge/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/GameInstances/BP_SubGameInstance.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/GameInstances/BP_SubGameInstance.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI/OptionsMenu/WBP_OptionsMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI/OptionsMenu/WBP_OptionsMenu.uasset" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -278,6 +282,8 @@
       <workItem from="1677515515658" duration="314000" />
       <workItem from="1677601869278" duration="1555000" />
       <workItem from="1677682647231" duration="632000" />
+      <workItem from="1679691217035" duration="820000" />
+      <workItem from="1679694233320" duration="1304000" />
     </task>
     <servers />
   </component>
